@@ -1,6 +1,15 @@
-
 #ifndef LIBFT_H
 # define LIBFT_H
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+
+# endif
+
+# ifndef MAX_BUFFER_SIZE
+#  define MAX_BUFFER_SIZE 10000000
+
+# endif
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -28,6 +37,9 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 int		ft_atoi(const char *nptr);
 int		ft_lstsize(t_list *lst);
+char	*get_next_line(int fd);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strjoin_gnl(char *line, char *buffer);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
@@ -38,6 +50,8 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	**ft_split(char const *s, char c);
 char	*ft_itoa(int n);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
+void	ft_excess(char *buffer);
+void	ft_concat(char *nxt_line, char *line, char *buffer, size_t len_buffer);
 void	*ft_memset(void *s, int c, size_t n);
 void	ft_bzero(void *s, size_t n);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
@@ -54,6 +68,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new);
 void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
+size_t	ft_strlen_gnl(const char *s);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 size_t	ft_strlen(const char *s);

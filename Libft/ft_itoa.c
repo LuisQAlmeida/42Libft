@@ -1,4 +1,3 @@
-
 #include "libft.h"
 
 static int	get_len(int n)
