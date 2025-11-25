@@ -5,12 +5,18 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdint.h>
+# include <stdarg.h>
 
 typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
 }	t_list;
+int		ft_printf(const char *format, ...);
+int		ft_putchar_a(char c);
+int		ft_putstr_a(const char *s);
+int		ft_putnum(unsigned long long num, char c);
+int		ft_print_format(va_list arg_list, char c);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 int		ft_isalnum(int c);
