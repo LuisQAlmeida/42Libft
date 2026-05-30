@@ -38,7 +38,6 @@ int		ft_memcmp(const void *s1, const void *s2, size_t n);
 int		ft_atoi(const char *nptr);
 int		ft_lstsize(t_list *lst);
 char	*get_next_line(int fd);
-char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin_gnl(char *line, char *buffer);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
