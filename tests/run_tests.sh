@@ -3,17 +3,17 @@
 #                                                                                                  #
 #   Libft test runner                                                                              #
 #                                                                                                  #
-#   Usage from the Libft_tests folder:                                                             #
+#   Usage from the tests folder:                                                                   #
 #                                                                                                  #
-#       chmod +x run_libft_tests.sh                                                                #
-#       ./run_libft_tests.sh                                                                       #
+#       chmod +x run_tests.sh                                                                      #
+#       ./run_tests.sh                                                                             #
 #                                                                                                  #
 #   This script:                                                                                   #
-#   - runs make fclean, make, and make bonus in ../Libft                                           #
-#   - compiles libft_tests.c against ../Libft/libft.a                                               #
+#   - runs make fclean, make, and make bonus in ../libft                                           #
+#   - compiles tests.c against ../libft/libft.a                                                    #
 #   - runs the test binary                                                                         #
 #   - runs Valgrind if available                                                                   #
-#   - runs make fclean again to leave ../Libft clean                                               #
+#   - runs make fclean again to leave ../libft clean                                               #
 #                                                                                                  #
 # ************************************************************************************************ #
 
@@ -21,10 +21,10 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-LIBFT_DIR="$ROOT_DIR/Libft"
-TEST_SRC="$SCRIPT_DIR/libft_tests.c"
+LIBFT_DIR="$ROOT_DIR/libft"
+TEST_SRC="$SCRIPT_DIR/tests.c"
 BUILD_DIR="$SCRIPT_DIR/.build"
-TEST_BIN="$BUILD_DIR/libft_tests"
+TEST_BIN="$BUILD_DIR/tests"
 
 GREEN="\033[32m"
 RED="\033[31m"
@@ -58,7 +58,7 @@ trap cleanup EXIT
 print_step "Checking project layout"
 
 if [ ! -d "$LIBFT_DIR" ]; then
-	fail "Libft directory not found: $LIBFT_DIR"
+	fail "libft directory not found: $LIBFT_DIR"
 	exit "$STATUS"
 fi
 
@@ -73,7 +73,7 @@ if [ ! -f "$LIBFT_DIR/libft.h" ]; then
 fi
 
 if [ ! -f "$TEST_SRC" ]; then
-	fail "libft_tests.c not found: $TEST_SRC"
+	fail "tests.c not found: $TEST_SRC"
 	exit "$STATUS"
 fi
 
@@ -102,7 +102,7 @@ mkdir -p "$BUILD_DIR"
 
 if ! cc -Wall -Wextra -Werror -I"$LIBFT_DIR" "$TEST_SRC" \
 	"$LIBFT_DIR/libft.a" -o "$TEST_BIN"; then
-	fail "libft_tests.c compilation failed"
+	fail "tests.c compilation failed"
 	exit "$STATUS"
 fi
 

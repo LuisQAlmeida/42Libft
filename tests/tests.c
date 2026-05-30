@@ -2,15 +2,18 @@
 /*                                                                                                */
 /*   Libft tests:                                                                                 */
 /*                                                                                                */
-/*   Compile inside your Libft directory after running `make bonus`:                              */
+/*   Recommended usage from the tests directory:                                                  */
 /*                                                                                                */
-/*   cc -Wall -Wextra -Werror test_libft.c libft.a -o test_libft                                  */
+/*   ./run_tests.sh                                                                               */
 /*                                                                                                */
-/*   Run normal tests:                                                                            */
-/*   ./test_libft                                                                                 */
+/*   Manual compile, from the tests directory:                                                    */
+/*   (Requires ../libft/libft.a to exist. Run `make bonus` in ../libft first.)                    */
 /*                                                                                                */
-/*   Run leak check:                                                                              */
-/*   valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./test_libft            */
+/*   cc -Wall -Wextra -Werror -I../libft tests.c ../libft/libft.a -o tests                        */
+/*                                                                                                */
+/*   Manual Valgrind:                                                                             */
+/*                                                                                                */
+/*   valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./tests                 */
 /*                                                                                                */
 /* ********************************************************************************************** */
 

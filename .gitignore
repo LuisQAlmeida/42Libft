@@ -1,89 +1,52 @@
-# Ubuntu-specific
-*~                     # Backup files (e.g., vim, emacs)
-*.bak                  # Backup files
+# **************************************************************************** #
+#                                                                              #
+#                                  Git Ignore                                  #
+#                                                                              #
+# **************************************************************************** #
 
-# Vim
-*.swp                  # Vim swap files
-*.swo                  # Vim swap files
-*.un~                  # Vim undo files
-.vim/
+# Build artifacts
+*.o
+*.a
+*.d
+*.out
+*.exe
 
-# Emacs
-*~                     # Emacs backup files
-# Auto-save files
-# These are created by Emacs when editing a file, and usually start with # and end with #
-.#*                    # Emacs auto-save files
-*.elc                  # Compiled Emacs Lisp files
-.emacs.d/              # Emacs configuration directory
+# Libft generated files
+libft/libft.a
+libft/*.o
 
-# VSCode
-.vscode/               # VSCode workspace settings
-*.code-workspace
+# Test build artifacts
+tests/.build/
+tests/tests
+tests/*.tmp
+tests/*_tmp.txt
 
-# macOS and Windows (for cross-platform compatibility)
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+*.log
+
+# Valgrind / debug outputs
+valgrind-out.txt
+vgcore.*
+core
+
+# Doxygen generated documentation
+Doxyfile
+html/
+latex/
+
+# Editor files
+*.swp
+*.swo
+*.swn
+*~
+.vscode/
+.idea/
+
+# OS files
 .DS_Store
 Thumbs.db
-
-# Node (if using node.js tools)
-node_modules/
-
-# Logs and temp files
-*.log
-*.tmp
-
-# Obsidian (if using for notes)
-.obsidian/
-
-# C
-## Prerequisites
-*.d
-
-## Object files
-*.o
-*.ko
-*.obj
-*.elf
-
-## Linker output
-*.ilk
-*.map
-*.exp
-
-## Precompiled Headers
-*.gch
-*.pch
-
-## Libraries
-*.lib
-*.a
-*.la
-*.lo
-
-## Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-## Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
-## Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
-
-## Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
