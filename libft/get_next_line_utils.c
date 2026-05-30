@@ -14,19 +14,6 @@ size_t	ft_strlen_gnl(const char *s)
 	return (i);
 }
 
-char	*ft_strchr(const char *s, int c)
-{
-	while (*s)
-	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
-	}
-	if ((char)c == 0)
-		return ((char *)s);
-	return (NULL);
-}
-
 void	ft_concat(char *nxt_line, char *line, char *buffer, size_t len_buffer)
 {
 	size_t	i;
