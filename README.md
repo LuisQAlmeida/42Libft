@@ -372,9 +372,14 @@ test runner is required rather than optional in the reference job.
 
 ### `CI / quality`
 
-The compiler-diversity job validates the same maintained build interface
-with Clang, including mandatory and bonus builds, incremental archive
-behaviour, `re`, cleanup, and repository cleanliness.
+The quality job validates the maintained build interface with Clang,
+including mandatory and bonus builds, incremental archive behaviour,
+`re`, and cleanup.
+
+It also installs Doxygen and validates the repository-controlled API
+documentation by generating HTML from `Doxyfile`, checking the expected
+output and representative public API entries, and removing the generated
+documentation before the final repository-cleanliness check.
 
 The workflow uses an immutable reviewed `actions/checkout` revision and
 does not persist repository credentials.
@@ -383,7 +388,7 @@ does not persist repository credentials.
 
 ## Doxygen Documentation
 
-The public API in `libft.h` is documented using Doxygen-style comments.
+The public API in `libft/libft.h` is documented using Doxygen-style comments.
 
 The documentation explains:
 
@@ -392,36 +397,44 @@ The documentation explains:
 - return values;
 - allocation behavior;
 - ownership rules;
-- caller responsibilities.
+- caller responsibilities;
+- the public `t_list` type and its members.
 
-To generate HTML documentation, install Doxygen and run from the `libft/` directory:
+The repository tracks a canonical `Doxyfile`, so documentation generation
+does not depend on a locally generated configuration.
+
+Install Doxygen on Ubuntu if required:
 
 ```bash
-doxygen -g
+sudo apt install doxygen
+```
+
+Then generate the documentation from the repository root:
+
+```bash
 doxygen Doxyfile
 ```
 
-By default, Doxygen generates documentation in:
+Generated HTML is written to:
 
 ```text
-html/
+docs/html/
 ```
 
-Open:
+The main entry point is:
 
 ```text
-html/index.html
+docs/html/index.html
 ```
 
-Recommended `.gitignore` entries for generated documentation:
+Generated documentation is intentionally ignored by Git, while the
+`Doxyfile` itself is version-controlled as part of the maintained
+documentation contract.
 
-```gitignore
-html/
-latex/
-Doxyfile
-```
-
-A custom `Doxyfile` can be added later if generated documentation should become part of the repository workflow.
+The configuration treats Doxygen warnings as validation failures. The
+`CI / quality` job installs Doxygen, generates the documentation, verifies
+the expected HTML output and representative API entries, removes the
+generated files, and checks repository cleanliness afterward.
 
 ---
 
@@ -485,6 +498,7 @@ This repository aims to maintain the following standards:
 - automated tests pass;
 - Valgrind reports no leaks or memory errors in the automated test suite;
 - GitHub Actions protects the maintained build and test contracts;
+- CI validates warning-free Doxygen generation;
 - CI leaves the repository free of generated artefacts;
 - public API is documented in `libft.h`;
 - tests are kept separate from production source files;
