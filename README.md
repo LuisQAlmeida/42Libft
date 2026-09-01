@@ -17,6 +17,7 @@ The goal of this project is to keep Libft not only functional, but also clean, d
 - [Build Instructions](#build-instructions)
 - [Automated Tests](#automated-tests)
 - [Memory Checking with Valgrind](#memory-checking-with-valgrind)
+- [Continuous Integration](#continuous-integration)
 - [Doxygen Documentation](#doxygen-documentation)
 - [Using Libft in Other Projects](#using-libft-in-other-projects)
 - [Quality Checklist](#quality-checklist)
