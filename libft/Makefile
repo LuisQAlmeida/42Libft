@@ -6,16 +6,22 @@ BONUS_SRC = ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c ft_lstl
 OBJ = $(SRC:.c=.o)
 BONUS_OBJ = $(BONUS_SRC:.c=.o)
 
+ARCHIVE_OBJ = $(OBJ)
+
+ifeq ($(WITH_BONUS),1)
+ARCHIVE_OBJ += $(BONUS_OBJ)
+endif
+
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 AR = ar rcs
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	$(AR) $(NAME) $(OBJ)
+$(NAME): $(ARCHIVE_OBJ)
+	$(AR) $(NAME) $(ARCHIVE_OBJ)
 
-%.o: %.c
+%.o: %.c libft.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
@@ -26,7 +32,7 @@ fclean: clean
 
 re: fclean all
 
-bonus: $(OBJ) $(BONUS_OBJ)
-	$(AR) $(NAME) $(OBJ) $(BONUS_OBJ)
+bonus:
+	$(MAKE) WITH_BONUS=1 $(NAME)
 
 .PHONY: all clean fclean re bonus
