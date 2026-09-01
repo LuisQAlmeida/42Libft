@@ -157,13 +157,13 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install Clang
+      - name: Install quality dependencies
         shell: bash
         run: |
           set -euo pipefail
 
           sudo apt-get update
-          sudo apt-get install -y build-essential clang
+          sudo apt-get install -y build-essential clang doxygen
 
       - name: Validate Clang build invariants
         shell: bash
@@ -214,6 +214,42 @@ jobs:
             exit 1
           fi
 
+      - name: Validate API documentation
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          rm -rf docs/html
+          rmdir docs 2>/dev/null || true
+
+          doxygen Doxyfile
+
+          test -f docs/html/index.html
+
+          for symbol in \
+            ft_isalpha \
+            ft_memset \
+            ft_strlen \
+            ft_split \
+            ft_lstnew \
+            ft_printf \
+            get_next_line \
+            t_list
+          do
+            if ! grep -RFl "$symbol" docs/html >/dev/null 2>&1; then
+              echo "Generated documentation is missing: $symbol"
+              exit 1
+            fi
+          done
+
+          rm -rf docs/html
+          rmdir docs 2>/dev/null || true
+
+          if [ -e docs/html ]; then
+            echo "Generated documentation remains after cleanup"
+            exit 1
+          fi
+
       - name: Verify repository cleanliness
         shell: bash
         run: |
@@ -222,7 +258,7 @@ jobs:
           status="$(git status --porcelain)"
 
           if [ -n "$status" ]; then
-            echo "Repository is dirty after Clang validation:"
+            echo "Repository is dirty after quality validation:"
             printf '%s\n' "$status"
             exit 1
           fi
