@@ -342,6 +342,44 @@ valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./tests
 
 ---
 
+## Continuous Integration
+
+GitHub Actions validates the maintained build and test contracts on pull
+requests targeting `main` and on pushes to `main`.
+
+The workflow runs on Ubuntu 24.04 and contains two jobs:
+
+### `CI / build`
+
+The reference job validates:
+
+- the normal GCC build;
+- creation of `libft.a`;
+- incremental `make` behaviour;
+- rebuild propagation after a `libft.h` change;
+- bonus compilation and expected linked-list symbols;
+- incremental `make bonus` behaviour;
+- the `re` and `fclean` targets;
+- the repository-controlled `tests/run_tests.sh` suite;
+- all 105 automated tests;
+- Valgrind memory validation;
+- removal of generated build artefacts;
+- repository cleanliness after validation.
+
+Valgrind is installed explicitly in CI, so the memory-safety phase of the
+test runner is required rather than optional in the reference job.
+
+### `CI / quality`
+
+The compiler-diversity job validates the same maintained build interface
+with Clang, including mandatory and bonus builds, incremental archive
+behaviour, `re`, cleanup, and repository cleanliness.
+
+The workflow uses an immutable reviewed `actions/checkout` revision and
+does not persist repository credentials.
+
+---
+
 ## Doxygen Documentation
 
 The public API in `libft.h` is documented using Doxygen-style comments.
@@ -437,10 +475,16 @@ Include the header in source files:
 This repository aims to maintain the following standards:
 
 - compiles with `-Wall -Wextra -Werror`;
+- reference builds succeed with GCC;
+- compiler-diversity builds succeed with Clang;
 - static library builds with `make`;
 - bonus functions build with `make bonus`;
+- unchanged builds preserve `libft.a`;
+- header changes invalidate dependent object files;
 - automated tests pass;
 - Valgrind reports no leaks or memory errors in the automated test suite;
+- GitHub Actions protects the maintained build and test contracts;
+- CI leaves the repository free of generated artefacts;
 - public API is documented in `libft.h`;
 - tests are kept separate from production source files;
 - generated files are cleaned after test execution;
