@@ -77,6 +77,9 @@ This library is intended to be reused in projects such as:
 
 ```text
 42Libft/
+├── .github/
+│   └── workflows/
+│       └── ci.yml
 ├── libft/
 │   ├── ft_*.c
 │   ├── get_next_line.c
@@ -86,17 +89,36 @@ This library is intended to be reused in projects such as:
 ├── tests/
 │   ├── tests.c
 │   └── run_tests.sh
+├── .gitignore
+├── Doxyfile
 ├── LICENSE
 └── README.md
 ```
 
 ### `libft/`
 
-Contains the actual library source code, the public header, and the Makefile used to build `libft.a`.
+Contains the buildable C library: implementation source files, the public
+header, and the Makefile used to produce `libft.a`.
 
 ### `tests/`
 
-Contains the automated test program and the shell script used to build, test, run Valgrind, and clean the project.
+Contains the repository-controlled automated test suite and runner used to
+build the library, execute the tests, run Valgrind, and clean generated
+artefacts.
+
+### `.github/workflows/ci.yml`
+
+Defines the GitHub Actions workflow that validates reference GCC builds,
+Clang compiler-diversity builds, incremental build behaviour, automated
+tests, Valgrind, Doxygen generation, and repository cleanliness.
+
+### `Doxyfile`
+
+Defines the canonical repository-controlled configuration used to generate
+and validate the Libft API documentation.
+
+Generated build artefacts, test output, and Doxygen HTML are intentionally
+excluded from this maintained repository structure.
 
 ---
 
