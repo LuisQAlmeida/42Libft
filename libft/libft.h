@@ -21,8 +21,8 @@
  */
 typedef struct s_list
 {
-	void			*content;
-	struct s_list	*next;
+	void			*content; /**< Generic content stored in the node. */
+	struct s_list	*next; /**< Next node, or NULL at the end of the list. */
 }	t_list;
 
 /* ************************************************************************** */
