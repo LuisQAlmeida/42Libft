@@ -1,0 +1,228 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install reference dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          sudo apt-get update
+          sudo apt-get install -y build-essential valgrind
+
+      - name: Validate reference build invariants
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          make -C libft fclean
+          make -C libft
+
+          test -f libft/libft.a
+
+          before="$(stat -c '%Y' libft/libft.a)"
+          sleep 1
+          make -C libft
+          after="$(stat -c '%Y' libft/libft.a)"
+
+          if [ "$before" != "$after" ]; then
+            echo "Unchanged make unexpectedly rewrote libft.a"
+            exit 1
+          fi
+
+          object_before="$(stat -c '%Y' libft/ft_strlen.o)"
+          archive_before="$(stat -c '%Y' libft/libft.a)"
+
+          sleep 1
+          touch libft/libft.h
+          make -C libft
+
+          object_after="$(stat -c '%Y' libft/ft_strlen.o)"
+          archive_after="$(stat -c '%Y' libft/libft.a)"
+
+          git restore -- libft/libft.h
+
+          if [ "$object_before" = "$object_after" ]; then
+            echo "Header change did not rebuild object files"
+            exit 1
+          fi
+
+          if [ "$archive_before" = "$archive_after" ]; then
+            echo "Header change did not rebuild libft.a"
+            exit 1
+          fi
+
+          make -C libft fclean
+          make -C libft
+          make -C libft bonus
+
+          nm -g --defined-only libft/libft.a \
+            | awk 'NF {print $NF}' \
+            > /tmp/libft-symbols.txt
+
+          for symbol in \
+            ft_lstnew \
+            ft_lstadd_front \
+            ft_lstsize \
+            ft_lstlast \
+            ft_lstadd_back \
+            ft_lstdelone \
+            ft_lstclear \
+            ft_lstiter \
+            ft_lstmap
+          do
+            if ! grep -Fxq "$symbol" /tmp/libft-symbols.txt; then
+              echo "Missing bonus symbol: $symbol"
+              exit 1
+            fi
+          done
+
+          before="$(stat -c '%Y' libft/libft.a)"
+          sleep 1
+          make -C libft bonus
+          after="$(stat -c '%Y' libft/libft.a)"
+
+          if [ "$before" != "$after" ]; then
+            echo "Unchanged make bonus unexpectedly rewrote libft.a"
+            exit 1
+          fi
+
+          make -C libft re
+          test -f libft/libft.a
+
+          make -C libft fclean
+
+          artefacts="$(
+            find libft -maxdepth 1 \
+              \( -name '*.o' -o -name '*.a' \) \
+              -print
+          )"
+
+          if [ -n "$artefacts" ]; then
+            echo "Build artefacts remain after fclean:"
+            printf '%s\n' "$artefacts"
+            exit 1
+          fi
+
+      - name: Run automated tests and Valgrind
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          command -v valgrind >/dev/null
+          ./tests/run_tests.sh
+
+      - name: Verify repository cleanliness
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          status="$(git status --porcelain)"
+
+          if [ -n "$status" ]; then
+            echo "Repository is dirty after validation:"
+            printf '%s\n' "$status"
+            exit 1
+          fi
+
+  quality:
+    name: quality
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install Clang
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          sudo apt-get update
+          sudo apt-get install -y build-essential clang
+
+      - name: Validate Clang build invariants
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          make -C libft fclean
+          make -C libft CC=clang
+
+          test -f libft/libft.a
+
+          before="$(stat -c '%Y' libft/libft.a)"
+          sleep 1
+          make -C libft CC=clang
+          after="$(stat -c '%Y' libft/libft.a)"
+
+          if [ "$before" != "$after" ]; then
+            echo "Unchanged Clang build unexpectedly rewrote libft.a"
+            exit 1
+          fi
+
+          make -C libft bonus CC=clang
+
+          before="$(stat -c '%Y' libft/libft.a)"
+          sleep 1
+          make -C libft bonus CC=clang
+          after="$(stat -c '%Y' libft/libft.a)"
+
+          if [ "$before" != "$after" ]; then
+            echo "Unchanged Clang bonus build unexpectedly rewrote libft.a"
+            exit 1
+          fi
+
+          make -C libft re CC=clang
+          test -f libft/libft.a
+
+          make -C libft fclean
+
+          artefacts="$(
+            find libft -maxdepth 1 \
+              \( -name '*.o' -o -name '*.a' \) \
+              -print
+          )"
+
+          if [ -n "$artefacts" ]; then
+            echo "Build artefacts remain after Clang validation:"
+            printf '%s\n' "$artefacts"
+            exit 1
+          fi
+
+      - name: Verify repository cleanliness
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          status="$(git status --porcelain)"
+
+          if [ -n "$status" ]; then
+            echo "Repository is dirty after Clang validation:"
+            printf '%s\n' "$status"
+            exit 1
+          fi
