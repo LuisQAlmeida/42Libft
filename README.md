@@ -440,47 +440,281 @@ generated files, and checks repository cleanliness afterward.
 
 ## Using Libft in Other Projects
 
-To reuse this library in another C project, copy the `libft/` directory into the target repository.
+Libft can be integrated into another C project in several valid ways.
+The appropriate model depends on how much dependency provenance,
+repository independence, and update automation the consumer requires.
 
-Example structure:
+For maintained portfolio repositories, the recommended workflow is a
+**Git submodule pinned to an explicit reviewed revision**.
+
+Manual vendoring remains a valid simpler alternative, while Git subtree
+provides a third option for projects that want dependency source stored
+directly in the consumer repository while retaining an upstream
+relationship.
+
+### Choosing an integration model
+
+| Property | Pinned Git submodule | Vendored copy | Git subtree |
+|---|---|---|---|
+| Dependency revision representation | Exact Gitlink | Manual provenance | Imported Git history |
+| Source stored as ordinary files in parent repository | No | Yes | Yes |
+| Additional clone initialization required | Yes | No | No |
+| Upstream update path retained | Yes | Manual | Yes |
+| Controlled upstream updates | Yes | Manual | Yes |
+| Workflow complexity | Moderate | Low | Higher |
+| Portfolio recommendation | **Recommended** | Supported | Optional |
+
+### Pinned Git submodule — recommended
+
+The canonical Libft repository is:
 
 ```text
-my_project/
+git@github.com:LuisQAlmeida/42Libft.git
+```
+
+A submodule keeps Libft as an independent Git repository while the
+consumer records the exact Libft commit it was validated against.
+
+A recommended consumer layout is:
+
+```text
+project/
+├── external/
+│   └── libft/                  # 42Libft repository
+│       ├── libft/              # buildable C library
+│       │   ├── libft.h
+│       │   ├── Makefile
+│       │   ├── *.c
+│       │   └── ...
+│       ├── tests/
+│       ├── Doxyfile
+│       └── README.md
+├── include/
+├── src/
+└── Makefile
+```
+
+The resulting library paths are therefore typically:
+
+```text
+external/libft/libft/libft.h
+external/libft/libft/libft.a
+```
+
+The repeated `libft/libft` is intentional. The first `libft` identifies
+the dependency repository under `external/`; the second identifies the
+buildable library directory inside the 42Libft repository.
+
+#### Adding and pinning the dependency
+
+Add the canonical repository:
+
+```bash
+git submodule add git@github.com:LuisQAlmeida/42Libft.git external/libft
+```
+
+Then select the exact revision the consumer should use:
+
+```bash
+git -C external/libft fetch origin
+git -C external/libft checkout <reviewed-commit-or-tag>
+```
+
+Inspect the selected revision with:
+
+```bash
+git -C external/libft rev-parse HEAD
+```
+
+The parent repository stores the selected submodule commit as a
+**Gitlink**. It can be inspected with:
+
+```bash
+git ls-files -s external/libft
+```
+
+A submodule entry uses Git mode `160000`, identifying the exact commit
+recorded by the consumer rather than storing Libft files as ordinary files
+in the parent repository. After initialization, the dependency files still
+appear normally in the consumer working tree under `external/libft/`.
+
+Commit both the submodule configuration and selected revision in the
+consumer repository:
+
+```bash
+git add .gitmodules external/libft
+```
+
+Do not rely on automatically following the latest upstream `main`.
+Explicit pinning prevents a consumer from silently adopting Libft changes
+that it has not rebuilt and tested.
+
+#### Cloning a project with Libft
+
+Clone a consumer and initialize its dependencies in one command:
+
+```bash
+git clone --recurse-submodules <repository>
+```
+
+For an already cloned repository, initialize the recorded dependencies
+with:
+
+```bash
+git submodule update --init --recursive
+```
+
+#### Updating Libft
+
+A Libft upgrade should be an explicit dependency change:
+
+1. fetch the canonical Libft repository;
+2. inspect the available upstream revisions;
+3. select a reviewed commit or release;
+4. check out that revision inside `external/libft`;
+5. rebuild and test the consuming project;
+6. commit the changed Gitlink in the consumer repository.
+
+For example:
+
+```bash
+git -C external/libft fetch origin
+git -C external/libft checkout <reviewed-commit-or-tag>
+git add external/libft
+```
+
+Updating the canonical Libft repository does **not** automatically update
+its consumers. That separation is intentional and preserves
+reproducibility.
+
+### Vendored copy — simple and self-contained
+
+Libft may instead be copied directly into a consuming repository.
+This is a valid option when a completely self-contained source tree and a
+simple clone experience are more important than preserving a live Git
+relationship with upstream.
+
+A typical layout is:
+
+```text
+project/
 ├── libft/
 │   ├── libft.h
 │   ├── Makefile
+│   ├── *.c
 │   └── ...
 ├── include/
 ├── src/
 └── Makefile
 ```
 
-Example Makefile integration:
+The buildable `libft/` directory from this repository can be copied into
+the consumer using the normal file-management workflow appropriate for
+that project.
+
+When vendoring Libft, record its provenance where practical:
+
+- canonical upstream repository;
+- exact commit or release used;
+- import or update date where useful.
+
+Vendoring provides a simple, self-contained checkout with no submodule
+initialization requirement. In exchange, Git no longer records the
+upstream Libft relationship automatically, and copied files can drift
+from the canonical repository. Updates must therefore be synchronized and
+validated manually.
+
+Vendoring is not inherently less professional than using a submodule. It
+represents a different engineering trade-off between dependency
+provenance, update mechanics, and repository independence.
+
+### Git subtree — optional alternative
+
+Git subtree provides another model in which Libft source is stored
+directly inside the consumer repository while retaining a structured
+relationship with the canonical upstream repository.
+
+It can be useful when a project wants:
+
+- a self-contained checkout;
+- no separate submodule initialization;
+- an explicit mechanism for importing future upstream changes.
+
+A subtree therefore sits between a submodule and a manually vendored
+copy. Its trade-off is a more complex import and update workflow, with
+additional decisions around imported history and squash commits.
+
+For example, after fetching the canonical repository as an upstream Git
+remote, a reviewed revision can be imported beneath a dedicated prefix:
+
+```bash
+git remote add libft-upstream git@github.com:LuisQAlmeida/42Libft.git
+git fetch libft-upstream
+git subtree add --prefix=external/libft libft-upstream <reviewed-revision> --squash
+```
+
+Subtree is an optional alternative rather than the default recommendation
+for the maintained portfolio repositories.
+
+### Build integration
+
+Dependency management and build integration are related but separate
+concerns. Each consumer remains responsible for adapting its Makefile to
+the selected layout.
+
+For the recommended submodule layout, paths can be centralized through
+Makefile variables:
 
 ```make
-LIBFT_DIR = libft
-LIBFT = $(LIBFT_DIR)/libft.a
+LIBFT_REPO := external/libft
+LIBFT_DIR  := $(LIBFT_REPO)/libft
+LIBFT      := $(LIBFT_DIR)/libft.a
+CPPFLAGS   += -I$(LIBFT_DIR)
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
-
-clean:
-	$(MAKE) -C $(LIBFT_DIR) clean
-	rm -f $(OBJS)
-
-fclean: clean
-	$(MAKE) -C $(LIBFT_DIR) fclean
-	rm -f $(NAME)
 ```
 
-Include the header in source files:
+For a vendored layout, the same pattern may instead use:
+
+```make
+LIBFT_DIR := libft
+LIBFT     := $(LIBFT_DIR)/libft.a
+```
+
+Adding `$(LIBFT_DIR)` to the compiler's include search path allows source
+files to include the public header normally:
 
 ```c
 #include "libft.h"
 ```
+
+### Dependency revisions and releases
+
+A maintained consumer should always be able to answer:
+
+> Which exact Libft revision was this project built and validated against?
+
+Explicit dependency identification improves:
+
+- reproducible builds;
+- dependency provenance;
+- controlled upgrades;
+- auditable Git history;
+- regression investigation;
+- protection against silent upstream changes.
+
+A submodule records the selected commit directly through its Gitlink.
+A vendored copy requires provenance to be recorded separately. A subtree
+retains its imported upstream relationship through Git history and the
+subtree workflow.
+
+Consumers may pin either an exact reviewed commit or, when maintained
+release tags are available, a reviewed release. In both cases the
+dependency should ultimately resolve to an immutable Git object.
 
 ---
 
