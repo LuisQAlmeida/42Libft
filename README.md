@@ -1,5 +1,9 @@
 # 42 Libft
 
+[![CI](https://github.com/LuisQAlmeida/42Libft/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/LuisQAlmeida/42Libft/actions/workflows/ci.yml)
+
+> Part of my [42 Common Core portfolio](https://github.com/LuisQAlmeida/42Portfolio).
+
 A custom C utility library developed as part of the **42 Common Core** curriculum.
 
 This repository reimplements a selection of standard C library functions, includes the bonus linked-list utilities, and also contains reusable implementations from later 42 projects such as [`ft_printf`](https://github.com/LuisQAlmeida/42ft_printf) and [`get_next_line`](https://github.com/LuisQAlmeida/42get_next_line).
