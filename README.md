@@ -11,6 +11,26 @@ This repository reimplements a selection of standard C library functions, includ
 The goal of this project is to keep Libft not only functional, but also clean, documented, tested, and ready to reuse in future C projects such as [`minishell`](https://github.com/LuisQAlmeida/42Minishell).
 
 
+## Table of Contents
+
+- [Academic Context](#academic-context)
+- [About](#about)
+- [Project Goals](#project-goals)
+- [Repository Structure](#repository-structure)
+- [Included Functions](#included-functions)
+- [Build Instructions](#build-instructions)
+- [Automated Tests](#automated-tests)
+- [Memory Checking with Valgrind](#memory-checking-with-valgrind)
+- [Continuous Integration](#continuous-integration)
+- [Doxygen Documentation](#doxygen-documentation)
+- [Using Libft in Other Projects](#using-libft-in-other-projects)
+- [Quality Checklist](#quality-checklist)
+- [AI Usage](#ai-usage)
+- [Notes](#notes)
+- [License](#license)
+
+---
+
 ## Academic Context
 
 | | |
@@ -37,26 +57,6 @@ first maintained portfolio release.
 
 See [Academic Project Context](docs/academic/README.md) for the detailed
 evaluation record, subject provenance, and repository-history notes.
-
----
-
-## Table of Contents
-
-- [Academic Context](#academic-context)
-- [About](#about)
-- [Project Goals](#project-goals)
-- [Repository Structure](#repository-structure)
-- [Included Functions](#included-functions)
-- [Build Instructions](#build-instructions)
-- [Automated Tests](#automated-tests)
-- [Memory Checking with Valgrind](#memory-checking-with-valgrind)
-- [Continuous Integration](#continuous-integration)
-- [Doxygen Documentation](#doxygen-documentation)
-- [Using Libft in Other Projects](#using-libft-in-other-projects)
-- [Quality Checklist](#quality-checklist)
-- [AI Usage](#ai-usage)
-- [Notes](#notes)
-- [License](#license)
 
 ---
 
