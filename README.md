@@ -10,10 +10,39 @@ This repository reimplements a selection of standard C library functions, includ
 
 The goal of this project is to keep Libft not only functional, but also clean, documented, tested, and ready to reuse in future C projects such as [`minishell`](https://github.com/LuisQAlmeida/42Minishell).
 
+
+## Academic Context
+
+| | |
+| --- | --- |
+| **Curriculum** | 42 Common Core |
+| **Project** | `Libft` |
+| **Subject reference** | Version 19.3 |
+| **Final evaluation** | **125/100** |
+| **Project type** | Individual |
+
+<img src="docs/assets/42-evaluation.png" alt="42 Libft evaluation: 125/100" width="180">
+
+The original academic project received a **125/100** evaluation.
+
+The subject document supplied for this portfolio pass identifies itself as
+**Libft version 19.3**. Because subject revisions may evolve over time, v19.3
+is recorded as the supplied documentary reference rather than asserted as an
+independently verified evaluation-day revision.
+
+The current `main` branch is a maintained portfolio edition. The immutable
+`portfolio-baseline-2026-09` tag preserves the repository state immediately
+before the structured professional modernization, while `v1.0.0` remains the
+first maintained portfolio release.
+
+See [Academic Project Context](docs/academic/README.md) for the detailed
+evaluation record, subject provenance, and repository-history notes.
+
 ---
 
 ## Table of Contents
 
+- [Academic Context](#academic-context)
 - [About](#about)
 - [Project Goals](#project-goals)
 - [Repository Structure](#repository-structure)
@@ -25,6 +54,7 @@ The goal of this project is to keep Libft not only functional, but also clean, d
 - [Doxygen Documentation](#doxygen-documentation)
 - [Using Libft in Other Projects](#using-libft-in-other-projects)
 - [Quality Checklist](#quality-checklist)
+- [AI Usage](#ai-usage)
 - [Notes](#notes)
 - [License](#license)
 
@@ -764,6 +794,41 @@ This repository aims to maintain the following standards:
 - tests are kept separate from production source files;
 - generated files are cleaned after test execution;
 - library is ready to be reused in later 42 projects.
+
+---
+
+## AI Usage
+
+AI use in this repository belongs exclusively to the later portfolio
+modernization phase.
+
+### Original academic development
+
+No AI tools were used during the original academic development of Libft.
+
+The original implementation, debugging, testing, and project understanding
+were completed without AI assistance.
+
+### Portfolio modernization
+
+AI was introduced only later as an engineering assistant during the
+professional modernization of the repository.
+
+It supported activities such as:
+
+- systematic repository and code audits;
+- maintainability review;
+- test and validation planning;
+- CI and GitHub workflow planning;
+- documentation design and review;
+- dependency-integration guidance;
+- portfolio-wide consistency work.
+
+AI-assisted suggestions were reviewed against the actual implementation and
+validated before integration.
+
+This distinction is intentional: AI contributed to the later engineering and
+documentation workflow, not to the original academic implementation.
 
 ---
 
