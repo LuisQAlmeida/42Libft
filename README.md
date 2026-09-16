@@ -11,9 +11,10 @@ This repository reimplements a selection of standard C library functions, includ
 The goal of this project is to keep Libft not only functional, but also clean, documented, tested, and ready to reuse in future C projects such as [`minishell`](https://github.com/LuisQAlmeida/42Minishell).
 
 
+> **42 Common Core:** 125/100 · Subject v19.3 · [Academic record & evaluation](docs/academic/README.md)
+
 ## Table of Contents
 
-- [Academic Context](#academic-context)
 - [About](#about)
 - [Project Goals](#project-goals)
 - [Repository Structure](#repository-structure)
@@ -28,35 +29,6 @@ The goal of this project is to keep Libft not only functional, but also clean, d
 - [AI Usage](#ai-usage)
 - [Notes](#notes)
 - [License](#license)
-
----
-
-## Academic Context
-
-| | |
-| --- | --- |
-| **Curriculum** | 42 Common Core |
-| **Project** | `Libft` |
-| **Subject reference** | Version 19.3 |
-| **Final evaluation** | **125/100** |
-| **Project type** | Individual |
-
-<img src="docs/assets/42-evaluation.png" alt="42 Libft evaluation: 125/100" width="180">
-
-The original academic project received a **125/100** evaluation.
-
-The subject document supplied for this portfolio pass identifies itself as
-**Libft version 19.3**. Because subject revisions may evolve over time, v19.3
-is recorded as the supplied documentary reference rather than asserted as an
-independently verified evaluation-day revision.
-
-The current `main` branch is a maintained portfolio edition. The immutable
-`portfolio-baseline-2026-09` tag preserves the repository state immediately
-before the structured professional modernization, while `v1.0.0` remains the
-first maintained portfolio release.
-
-See [Academic Project Context](docs/academic/README.md) for the detailed
-evaluation record, subject provenance, and repository-history notes.
 
 ---
 
